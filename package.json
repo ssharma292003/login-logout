@@ -1,0 +1,21 @@
+{
+  "name": "login-logout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shubham",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "lodash": "^4.17.21",
+    "mysql": "^2.18.1",
+    "npm-force-resolutions": "^0.0.10",
+    "sql": "^0.78.0"
+  }
+}

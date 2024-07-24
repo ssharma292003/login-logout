@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .data-container {
+            margin-top: 20px;
+        }
+        .data-item {
+            margin-bottom: 20px;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+<body>
+    <% if(session.loggedIn){%>
+    
+    <form id="questionForm" action="/add_questions" method="POST">
+        <div class="form-group">
+            <label for="question">Question:</label>
+            <textarea id="question" name="question" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Options:</label>
+            <div class="options">
+                <label>
+                    <input type="text" name="option1" placeholder="Option 1" required>
+                </label>
+                <label>
+                    <input type="text" name="option2" placeholder="Option 2" required>
+                </label>
+                <label>
+                    <input type="text" name="option3" placeholder="Option 3" required>
+                </label>
+                <label>
+                    <input type="text" name="option4" placeholder="Option 4" required>
+                </label>
+                <label>
+                    <input type="text" name="answere" placeholder="Answere" required>
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="submit-btn">Submit Question</button>
+    </form>
+
+    <%}%>
+</body>
+</html>

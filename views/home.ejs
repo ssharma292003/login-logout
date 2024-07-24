@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .data-container {
+            margin-top: 20px;
+        }
+        .data-item {
+            margin-bottom: 20px;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <% if(session.loggedIn){%>
+    <div class="container">
+        <a href="/logout">Logout</a>
+         <h1>Questions Data</h1>
+        <div class="data-container">
+            <% questions.forEach(question => { %>
+                <div class="data-item">
+                    <p><strong>Question:</strong> <%= question.question %></p>
+                    <form class="question-form" id="form<%= question._id %>">
+                        <label>
+                            <input type="radio" name="option<%= question._id %>" value="<%= question.option1 %>">
+                            <%= question.option1 %>
+                        </label><br>
+                        <label>
+                            <input type="radio" name="option<%= question._id %>" value="<%= question.option2 %>">
+                            <%= question.option2 %>
+                        </label><br>
+                        <label>
+                            <input type="radio" name="option<%= question._id %>" value="<%= question.option3 %>">
+                            <%= question.option3 %>
+                        </label><br>
+                        <label>
+                            <input type="radio" name="option<%= question._id %>" value="<%= question.option4 %>">
+                            <%= question.option4 %>
+                        </label>
+                        <p id="result<%= question._id %>"></p>
+                    </form>
+                </div>
+            <% }); %>
+        </div>
+        <button class="submit-btn" onclick="submitAllAnswers()">Submit All</button>
+        <div class="result" id="correctCount">Correct Answers: 0</div>
+    </div>
+    
+    <script>
+        let correctCount = 0;
+
+        async function submitAllAnswers() {
+            const allQuestions = document.querySelectorAll('.question-form');
+            const answers = [];
+
+            allQuestions.forEach(questionForm => {
+                const questionId = questionForm.id.replace('form', '');
+                const options = document.getElementsByName(`option${questionId}`);
+                let selectedOption;
+                for (const option of options) {
+                    if (option.checked) {
+                        selectedOption = option.value;
+                        break;
+                    }
+                }
+                answers.push({ questionId, selectedOption });
+            });
+
+            const response = await fetch('/check-answers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answers })
+            });
+
+            const result = await response.json();
+            correctCount = result.correctCount;
+            document.getElementById('correctCount').textContent = `Correct Answers: ${correctCount}`;
+            
+            result.answers.forEach(answer => {
+                const resultElement = document.getElementById(`result${answer.questionId}`);
+                if (answer.isCorrect) {
+                    resultElement.textContent = 'Correct!';
+                    resultElement.style.color = 'green';
+                } else {
+                    resultElement.textContent = 'Incorrect!';
+                    resultElement.style.color = 'red';
+                }
+            });
+        }
+    </script>
+    <%}%>
+</body>
+</html>
